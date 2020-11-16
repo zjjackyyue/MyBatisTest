@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjjacky.dao.UserMapper">
+    <select id="getUserList" resultType="User">
+        SELECT * FROM eesy_mybatis.user
+    </select>
+
+    <select id="getUserById" parameterType="int" resultType="com.zjjacky.pojo.User">
+        SELECT * FROM eesy_mybatis.user where id = #{id}
+    </select>
+
+    <select id="getUserByUsername" parameterType="Map" resultMap="userMap">
+        SELECT * FROM eesy_mybatis.user where username = #{username}
+    </select>
+
+    <!--映射结果集-->
+    <resultMap id="userMap" type="com.zjjacky.pojo.User">
+        <result column="id" property="id"></result>
+        <result column="username" property="username"></result>
+        <result column="password" property="password"></result>
+    </resultMap>
+
+    <select id="getUserLike" parameterType="map" resultType="com.zjjacky.pojo.User">
+        SELECT * FROM eesy_mybatis.user where username like CONCAT('%',#{username},'%')
+    </select>
+
+    <select id="getUserByLimit" parameterType="Map" resultType="User">
+        SELECT * FROM eesy_mybatis.user limit #{startIndex},#{pageSize}
+    </select>
+
+    <insert id="addUser" parameterType="com.zjjacky.pojo.User">
+        INSERT INTO eesy_mybatis.user (id, username, password) values (#{id},#{username},#{password})
+    </insert>
+
+    <insert id="addUser2" parameterType="map">
+        INSERT INTO eesy_mybatis.user (id, username, password) value (#{id},#{username},#{password})
+    </insert>
+
+    <update id="update" parameterType="com.zjjacky.pojo.User">
+        UPDATE eesy_mybatis.user set username = #{username}, password = #{password} where id = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM eesy_mybatis.user where id = #{id}
+    </delete>
+</mapper>

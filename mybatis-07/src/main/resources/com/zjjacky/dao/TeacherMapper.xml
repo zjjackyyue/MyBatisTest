@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjjacky.dao.TeacherMapper">
+
+    <!--==================方法1==================-->
+    <select id="getTeacher" resultMap="TeacherStudent">
+        select s.id sid, s.name sname, t.name tname, t.id tid
+        from teacher t, student s
+        where t.id = s.tid
+    </select>
+
+    <resultMap id="TeacherStudent" type="com.zjjacky.pojo.Teacher">
+        <result column="tid" property="id"></result>
+        <result column="tname" property="name"></result>
+        <collection property="students" ofType="com.zjjacky.pojo.Student">
+            <result column="sid" property="id"></result>
+            <result column="sname" property="name"></result>
+            <result column="tid" property="tid"></result>
+        </collection>
+    </resultMap>
+
+    <!--==================方法2==================-->
+    <select id="getTeacher2" resultMap="TeacherStudent2">
+        select * from teacher
+    </select>
+
+    <resultMap id="TeacherStudent2" type="com.zjjacky.pojo.Teacher">
+        <id column="id" property="id"></id>
+        <id column="name" property="name"></id>
+        <collection column="id" property="students" javaType="ArrayList" ofType="Student" select="getStudentByTeacherId"/>
+    </resultMap>
+
+    <select id="getStudentByTeacherId" resultType="com.zjjacky.pojo.Student">
+        select * from student
+    </select>
+</mapper>
